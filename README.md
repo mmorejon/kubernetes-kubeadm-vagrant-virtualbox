@@ -25,6 +25,8 @@ If you start the cluster with the default configurations you will get the follow
 * 1 node control-plane, 2 VCPU 2GB RAM
 * 2 nodes workers, 1 VCPU 1GB RAM
 * [Calico](https://www.projectcalico.org) for network communications and policies
+* (Optional) Nginx controller [v1.0.0](https://github.com/kubernetes/ingress-nginx/releases/tag/controller-v1.0.0)
+* (Optional) Metrics server [v0.3.7](https://github.com/kubernetes-sigs/metrics-server/releases/tag/v0.3.7)
 
 ## Installation
 
@@ -119,6 +121,91 @@ certificatesDir: /etc/kubernetes/pki
 networking:
   podSubnet: 10.244.0.0/16
 ```
+
+### Installing nginx
+
+Access the master node.
+
+```bash
+vagrant ssh master
+```
+
+Deploy the service.
+
+```bash
+k apply -f k8s/ingress/nginx/
+```
+
+<details>
+  <summary>Result</summary>
+
+  ```
+  namespace/ingress-nginx created
+  serviceaccount/ingress-nginx created
+  configmap/ingress-nginx-controller created
+  clusterrole.rbac.authorization.k8s.io/ingress-nginx created
+  clusterrolebinding.rbac.authorization.k8s.io/ingress-nginx created
+  role.rbac.authorization.k8s.io/ingress-nginx created
+  rolebinding.rbac.authorization.k8s.io/ingress-nginx created
+  service/ingress-nginx-controller-admission created
+  service/ingress-nginx-controller created
+  deployment.apps/ingress-nginx-controller created
+  ingressclass.networking.k8s.io/nginx created
+  validatingwebhookconfiguration.admissionregistration.k8s.io/ingress-nginx-admission created
+  serviceaccount/ingress-nginx-admission created
+  clusterrole.rbac.authorization.k8s.io/ingress-nginx-admission created
+  clusterrolebinding.rbac.authorization.k8s.io/ingress-nginx-admission created
+  role.rbac.authorization.k8s.io/ingress-nginx-admission created
+  rolebinding.rbac.authorization.k8s.io/ingress-nginx-admission created
+  job.batch/ingress-nginx-admission-create created
+  job.batch/ingress-nginx-admission-patch created
+  service/ingress-nginx-controller configured
+  ```
+</details>
+
+Acceda al IP del nodo master a través del [navegador](http://192.168.100.10/) o utilizando la consola.
+
+```bash
+curl 192.168.100.10
+
+<html>
+<head><title>404 Not Found</title></head>
+<body>
+<center><h1>404 Not Found</h1></center>
+<hr><center>nginx</center>
+</body>
+</html>
+```
+
+### Installing metrics-server
+
+Access the master node.
+
+```bash
+vagrant ssh master
+```
+
+Deploy the service.
+
+```bash
+k apply -f k8s/metrics-server/
+```
+
+<details>
+  <summary>Result</summary>
+
+  ```
+  clusterrole.rbac.authorization.k8s.io/system:aggregated-metrics-reader created
+  clusterrolebinding.rbac.authorization.k8s.io/metrics-server:system:auth-delegator created
+  rolebinding.rbac.authorization.k8s.io/metrics-server-auth-reader created
+  apiservice.apiregistration.k8s.io/v1beta1.metrics.k8s.io created
+  serviceaccount/metrics-server created
+  deployment.apps/metrics-server created
+  service/metrics-server created
+  clusterrole.rbac.authorization.k8s.io/system:metrics-server created
+  clusterrolebinding.rbac.authorization.k8s.io/system:metrics-server created
+  ```
+</details>
 
 ## Contributions
 
