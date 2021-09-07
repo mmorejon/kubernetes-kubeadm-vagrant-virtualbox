@@ -14,7 +14,7 @@ Let's think about the following questions for a second:
 
     After a new version of Kubernetes is announced, it is very common to have to wait for the platforms to have the new version available. If you are restless and curious, you are going to want to have a repository like this one to access the new features and test them.
 
-* *What elements can I configure of a cluster?*
+* *What elements can be configured in a cluster?*
 
     On platforms, the configuration framework is quite closed. If you want to customize the behavior of the control plane, you will need to do so elsewhere. With this repository you will be able to modify everything you need: networks, webhooks, cri or any other element thanks to the Kubeadm configuration files.
 
