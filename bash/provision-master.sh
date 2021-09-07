@@ -20,8 +20,8 @@ kubectl apply -f ${REPO_PATH}/calico/
 
 # enable completion commands
 echo "source <(kubectl completion bash)" >> /home/vagrant/.bashrc
-alias k=kubectl
-complete -F __start_kubectl k
+echo "alias k=kubectl" >> /home/vagrant/.bashrc
+echo "complete -F __start_kubectl k" >> /home/vagrant/.bashrc
 
 # remove RANDFILE configuration for openssl to avoid a warning message
 # https://github.com/openssl/openssl/issues/7754
